@@ -1,0 +1,20 @@
+server {
+  listen 8080;
+  listen [::]:8080;
+  root /home/site/wwwroot;
+  index  index.html
+  server_name example.com;
+  port_in_redirect off;
+
+  # todo
+  # replace "example.com" with "yourdomain.com"
+  # replace "PRERENDER_IO_TOKEN" with "real-token"
+  
+  location / {
+    proxy_set_header X-Prerender-Token PRERENDER_IO_TOKEN;
+    resolver 8.8.8.8;
+    set $prerender "service.prerender.io";
+    rewrite .* /https://www.example.com$request_uri? break;
+    proxy_pass https://$prerender;
+  }
+}
